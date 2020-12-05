@@ -200,11 +200,21 @@ const entries = [1939,
 1505]
 
 
-for (let entry of entries) {
-  const rest = 2020 - Number(entry);
-  if(entries.includes(rest)) {
-    console.log(`the pair is [${entry}, ${rest}]`);
-    console.log(`the result is`, entry * rest);
+for (let first of entries) {
+  let allFound = false;
+  for ( let second of entries) {
+    const sumOfFirstAndSecond = first + second;
+    if (sumOfFirstAndSecond < 2020) {
+      const third = 2020 - Number(sumOfFirstAndSecond);
+      if(entries.includes(third)) {
+        allFound = true;
+        console.log(`the pair is [${first},${second},${third}]`);
+        console.log(`the result is`, first * second * third);
+        break;
+      }
+    }
+  }
+  if(allFound){
     break;
   }
 }
