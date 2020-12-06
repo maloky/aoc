@@ -1009,24 +1009,23 @@ const example = [
 
 let validItems = 0;
 
-function ValidateItem(item) {
+
+function ValidatePass(item) {
   const [pattern,  password] = item.split(':');
   const [rule, letter] = pattern.split(' ');
-  const [min, max] =  rule.split('-');
+  const [firstCharPosition, secondCharPosition] = rule.split('-');
   
-  var regex = new RegExp(letter,'g');
-  const matches = password.match(regex);
-  if (matches) {
-    return matches.length >= min && matches.length <= max;
-  }
-  return false
+  const splitedPassword = password.trim().split('');
+
+  const firstRule = splitedPassword[firstCharPosition - 1] === letter;
+  const secondRule = splitedPassword[secondCharPosition - 1] === letter
+  
+  return (firstRule && !secondRule) || (!firstRule && secondRule);
 }
 
 for (let pwd of pwd_list) {
-  const valid = ValidateItem(pwd);
+  const valid = ValidatePass(pwd);
   if (valid) {
     validItems++;
   };
 }
-
-console.log("🚀 ~ file: day2.js ~ line 1005 ~ validItems", validItems)
