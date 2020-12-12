@@ -496,10 +496,10 @@ const groups = [
   "prkfqibx\nfkrqxbpi\nrpixfbqka",
   "cmthfprlzxvg\nchzgaxjkpwrl\ndhybeprslocun",
   "pdrc\nrpcd\ndcpr",
-  "nsi\nvlsig\nins\nsi\n"
+  "nsi\nvlsig\nins\nsi"
 ]
 
-const counter = groups.reduce((total, group) => {
+const uniqueCounter = groups.reduce((total, group) => {
   const uniqueAnswers = group.replace(/\n/g, '').split('').reduce((acc, curr) => {
       if (!acc.includes(curr)) {
         acc.push(curr);
@@ -509,5 +509,16 @@ const counter = groups.reduce((total, group) => {
   return total + uniqueAnswers.length;
 }, 0);
 
-console.log("🚀 ~ file: day6.js ~ line 511 ~ counter ~ counter", counter)
+console.log("🚀 ~ file: day6.js ~ line 511 ~ counter ~ uniqueCounter", uniqueCounter)
 
+const commonCounter = groups.reduce((total, group) => {
+  const [firstGroup, ...otherGroups] = group.split('\n');
+  const commonAnswers = firstGroup.split('').reduce((acc, letter) => {
+      if (otherGroups.every(group => group.includes(letter))) {
+        acc.push(letter);
+      };
+      return acc;
+  }, []);
+  return total + commonAnswers.length;
+}, 0);
+console.log("🚀 ~ file: day6.js ~ line 524 ~ commonCounter ~ commonCounter", commonCounter)
