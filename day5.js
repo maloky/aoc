@@ -830,7 +830,7 @@ const LOWER_HALF_ROW = 'B';
 const UPPER_HALF_COLUMN = 'L';
 const LOWER_HALF_COLUMN = 'R';
 
-var BoardingPassesId = [];
+var boardingPassesIds = [];
 
 
 for (const pass of boardingPasses) {
@@ -839,34 +839,52 @@ for (const pass of boardingPasses) {
   const rowCharsList = rowChars.split('');
   const columnCharsList = columnChars.split('');
 
-  const rowNumber = searchRow(0, 127, rowCharsList);
-  const columnNumber = searchRow(0, 8, columnCharsList);
+  const rowNumber = binarySearch(0, 127, rowCharsList);
+  const columnNumber = binarySearch(0, 8, columnCharsList);
 
-  BoardingPassesId.push(rowNumber * 8 + columnNumber);
+  boardingPassesIds.push(rowNumber * 8 + columnNumber);
 
-  function searchRow(minRow, maxRow, charList, selectorIndex = 0) {
+  function binarySearch(minRange, maxRange, charList, selectorIndex = 0) {
     
     let nextMinRow;
     let nextMaxRow;
     const selector = charList[selectorIndex];
     
-    const nextRange = Math.round((maxRow - minRow)/2);
+    const nextRange = Math.round((maxRange - minRange)/2);
     
     if (selector === UPPER_HALF_ROW || selector === UPPER_HALF_COLUMN ) {
-      nextMinRow = minRow;
-      nextMaxRow=  maxRow - nextRange;
+      nextMinRow = minRange;
+      nextMaxRow=  maxRange - nextRange;
     } else if (selector === LOWER_HALF_ROW || selector === LOWER_HALF_COLUMN) {
-      nextMinRow = minRow + nextRange;
-      nextMaxRow=  maxRow;
+      nextMinRow = minRange + nextRange;
+      nextMaxRow=  maxRange;
     }
 
     if (charList[selectorIndex + 1]) {
-      return searchRow(nextMinRow, nextMaxRow, charList,  selectorIndex + 1)
+      return binarySearch(nextMinRow, nextMaxRow, charList, selectorIndex + 1)
     }
     
-    return nextMinRow || nextMaxRow;
+    return nextMinRow;
   }
 
   };
 
-  console.log("max BoardingPassesId", Math.max(...BoardingPassesId))
+  const minimumId = Math.min(...boardingPassesIds);
+  const maximumId = Math.max(...boardingPassesIds);
+
+  let unusedBoardingPassesIds = [];
+  
+  for( let i = minimumId; i<= maximumId; i++ ) {
+    if (!boardingPassesIds.includes(i)) {
+      unusedBoardingPassesIds.push(i);
+    }
+  }
+  
+  
+  console.log("max BoardingPassesId", minimumId);
+  console.log("min BoardingPassesId", maximumId);
+  console.log("🚀 ~ file: day5.js ~ line 878 ~ BoardingPassesIds", boardingPassesIds.sort((a, b) => a - b))
+  console.log("🚀 ~ file: day5.js ~ line 876 ~ unusedBoardingPassesIds", unusedBoardingPassesIds)
+
+
+  
